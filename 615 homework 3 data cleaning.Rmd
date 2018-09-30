@@ -42,13 +42,8 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 
 
 ```{r }
-library(ggplot2)
-
 #plot obesity with death 
 ggplot(tablenew1) + geom_point(aes(y = Obesity, x = Total_Deaths, color = Obesity)) + geom_smooth(aes(y = Obesity, x = Total_Deaths)) 
-
-
-
 ```
 
 ```{r}
@@ -59,3 +54,7 @@ ggplot(data = tablenew1) +
 ```
 
 
+```{r}
+ggplot(data = tablenew1,mapping = aes(x = Smoker, y = Total_Deaths)) + 
+  geom_point()+ geom_smooth(method = "gam",formula = y~s(x,bs="cs"))
+```
