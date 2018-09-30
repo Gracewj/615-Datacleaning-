@@ -1,0 +1,51 @@
+---
+title: "615 assignment 3 data cleaning"
+author: "Si Chen"
+date: "September 30, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r }
+library(readr)
+library(tidyselect)
+library(tidyverse)
+
+
+#import datasets from MEASURESOFBIRTHANDDEATH and RISKFACTORSANDACCESSTOCARE
+tableM <- read.csv("D:/school material/MEASURESOFBIRTHANDDEATH.csv")
+tableR <- read.csv("D:/school material/RISKFACTORSANDACCESSTOCARE.csv")
+
+# select the variable total death in RISKFACTORSANDACCESSTOCARE
+death <- select(tableM, Total_Deaths)
+
+# select the variable obesity, smoker, diabetes, uninsured, Dentist_Rate,CHSI_State_Name from RISKFACTORSANDACCESSTOCARE
+risk <- select(tableR,Obesity,Smoker,Diabetes,Uninsured,Dentist_Rate,CHSI_State_Name)
+
+# combine to a new table
+tablenew <- cbind.data.frame(death,risk)
+
+# remove all useless inputs
+tablenew[tablenew < 0] <- NA
+
+# create the final data frame
+tablenew1<-tablenew[complete.cases(tablenew),]
+
+
+```
+
+
+
+```{r }
+library(ggplot2)
+
+#plot obesity with death 
+ggplot(tablenew1,x = obesity, y = Total_Deaths) + 
+
+
+
+
+```
