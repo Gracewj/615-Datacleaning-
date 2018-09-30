@@ -51,3 +51,12 @@ ggplot(tablenew1,x = obesity, y = Total_Deaths) +
 
 
 ```
+
+```{r}
+#plot smoker with death
+
+ggplot(data = tablenew1) + 
+  geom_point(mapping = aes(x = Smoker, y = Total_Deaths))+ geom_smooth(mapping = aes(x = Smoker, y = Total_Deaths))
+```
+
+
