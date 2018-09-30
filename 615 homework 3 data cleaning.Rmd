@@ -3,8 +3,8 @@ title: "615 assignment 3 data cleaning"
 author: "Si Chen,Grace Xie, Kaiyu yan, Siwei Hu"
 date: "September 30, 2018"
 output:
-  html_document:
-    df_print: paged
+  pdf_document:
+    latex_engine: xelatex
 ---
  We collect the data from he Data.gov, named Community Health Status Indicators (CHSI) to Combat Obesity, Heart Disease and Cancer(Chsi_dataset).It is imperative to understand that behavioral factors such as obesity, tobacco use, diet, physical activity, alcohol and drug use, sexual behavior and others substantially contribute to these deaths. After data cleaning, we choose obesity, uninsurence, diabetes, smkoing as our variables. 
 ```{r setup, include=FALSE}
@@ -55,7 +55,7 @@ Obesityp <- tablenew1 %>%
 
 table.state1 <- Obesityp %>% group_by(CHSI_State_Name) %>% summarise(Total_Deaths = sum(Total_Deaths),obesity_p=sum(obesity_p))
 #tablenew2 <- cbind.data.frame(Obesityp, tablenew1)
-par(mfrow=c(2,1))
+
 ggplot(table.state1) + geom_point(aes(x = obesity_p, y = Total_Deaths, color = obesity_p)) + geom_smooth(aes(x = obesity_p, y = Total_Deaths)) + ggtitle( "SiChen： Obesity vs Death")
 
 
@@ -112,8 +112,6 @@ ggplot(table.state4,aes(x = diabetes_p, y = Total_Deaths)) +
 ```
 
 
-
- 
  
   In conclusion, uninsurence, diabetes, smoking and obesity have positive relation with total death counts. Among all the variables, smoking is the most obvious factor that affect the death rate. More smoking causes higher death counts.
   
