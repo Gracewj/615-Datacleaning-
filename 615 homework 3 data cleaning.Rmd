@@ -6,18 +6,20 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,dev="CairoPNG",fig.align = "center", 
+                      fig.width = 5.656, fig.height = 4, global.par = TRUE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60),  # For code
+                      width = 60)  # For output
+options(cli.width = 60)  # For tidyverse loading messages
+#install.packages("pacman",repos="https://cloud.r-project.org")
+pacman::p_load("ggplot2","knitr","arm","foreign","car","Cairo","data.table","dplyr")
+par (mar=c(3,3,2,1), mgp=c(2,.7,0), tck=-.01)
 ```
 
 ```{r }
-library(readr)
-library(tidyselect)
-library(tidyverse)
-
-
 #import datasets from MEASURESOFBIRTHANDDEATH and RISKFACTORSANDACCESSTOCARE
-tableM <- read.csv("D:/school material/MEASURESOFBIRTHANDDEATH.csv")
-tableR <- read.csv("D:/school material/RISKFACTORSANDACCESSTOCARE.csv")
+tableM <- read.csv("MEASURESOFBIRTHANDDEATH.csv")
+tableR <- read.csv("RISKFACTORSANDACCESSTOCARE.csv")
 
 # select the variable total death in RISKFACTORSANDACCESSTOCARE
 death <- select(tableM, Total_Deaths)
