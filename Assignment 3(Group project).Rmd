@@ -19,9 +19,9 @@ par (mar=c(3,3,2,1), mgp=c(2,.7,0), tck=-.01)
 
 
 ```{r}
-library(readr)
-risk <- read_csv("RISKFACTORSANDACCESSTOCARE.csv")
-bnd<- read_csv("MEASURESOFBIRTHANDDEATH.csv")
+risk <- read.csv("RISKFACTORSANDACCESSTOCARE.csv")
+bnd<- read.csv("MEASURESOFBIRTHANDDEATH.csv")
+
 ```
 
 
@@ -29,6 +29,7 @@ bnd<- read_csv("MEASURESOFBIRTHANDDEATH.csv")
 ```{r}
 bnd.d <- select(bnd, Total_Deaths)
 risk <- select(risk,Obesity,Smoker,Diabetes,Uninsured,Dentist_Rate,CHSI_State_Name)
+table.new <- cbind.data.frame(risk,bnd.d)
 table.new[table.new < 0] <- NA
 table.new1<-table.new[complete.cases(table.new),]
 ```
