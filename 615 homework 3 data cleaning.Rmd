@@ -42,15 +42,20 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 
 
 ```{r }
+library(ggplot2)
+
 #plot obesity with death 
-ggplot(tablenew1) + geom_point(aes(y = Obesity, x = Total_Deaths, color = Obesity)) + geom_smooth(aes(y = Obesity, x = Total_Deaths)) 
+ggplot(tablenew1) + geom_point(aes(x = Obesity, y = Total_Deaths, color = Obesity)) + geom_smooth(aes(x = Obesity, y = Total_Deaths)) + ggtitle( "SiChen： Obesity vs Death")
+
+
+
 ```
 
 ```{r}
 #plot smoker with death
 
 ggplot(data = tablenew1) + 
-  geom_point(mapping = aes(x = Smoker, y = Total_Deaths))+ geom_smooth(mapping = aes(x = Smoker, y = Total_Deaths))
+  geom_point(mapping = aes(x = Smoker, y = Total_Deaths))+ geom_smooth(mapping = aes(x = Smoker, y = Total_Deaths)) + ggtitle( "Mark： Smoker vs Death")
 ```
 
 
