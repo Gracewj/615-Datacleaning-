@@ -44,8 +44,9 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 ```{r }
 library(ggplot2)
 
-#plot obesity with death 
-#ggplot(tablenew1,x = obesity, y = Total_Deaths) + 
+
+ggplot(tablenew1) + geom_point(aes(x = Obesity, y = Total_Deaths, color = Obesity)) + geom_smooth(aes(x = Obesity, y = Total_Deaths)) + ggtitle( "SiChen： Obesity vs Death")
+
 
 
 ```
@@ -55,9 +56,17 @@ library(ggplot2)
 table.state <- tablenew1 %>% group_by(CHSI_State_Name) %>% summarise(totaldeath = sum(Total_Deaths),uninsured=sum(Uninsured))
 
 ggplot(table.state)+
-  ggtitle("siwei: uninsured VS total_death")
-  geom_point(mapping = aes(x = uninsured,y = totaldeath),co)+
+  ggtitle("siwei: uninsured VS total_death")+
+  geom_point(mapping = aes(x = uninsured,y = totaldeath))+
   geom_smooth(mapping = aes(x = uninsured,y = totaldeath))
 
-
 ```
+
+```{r}
+#plot smoker with death
+
+ggplot(data = tablenew1) + 
+  geom_point(mapping = aes(x = Smoker, y = Total_Deaths))+ geom_smooth(mapping = aes(x = Smoker, y = Total_Deaths)) + ggtitle( "Mark： Smoker vs Death")
+```
+
+
