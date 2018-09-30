@@ -45,9 +45,19 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 library(ggplot2)
 
 #plot obesity with death 
-ggplot(tablenew1,x = obesity, y = Total_Deaths) + 
+#ggplot(tablenew1,x = obesity, y = Total_Deaths) + 
 
 
+```
+
+
+```{r}
+table.state <- tablenew1 %>% group_by(CHSI_State_Name) %>% summarise(totaldeath = sum(Total_Deaths),uninsured=sum(Uninsured))
+
+ggplot(table.state)+
+  ggtitle("siwei: uninsured VS total_death")
+  geom_point(mapping = aes(x = uninsured,y = totaldeath),co)+
+  geom_smooth(mapping = aes(x = uninsured,y = totaldeath))
 
 
 ```
