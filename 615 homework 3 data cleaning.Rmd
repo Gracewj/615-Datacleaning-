@@ -73,5 +73,7 @@ ggplot(data = tablenew1) +
 ```{r}
 #plot diabetes with death
 ggplot(data = tablenew1,mapping = aes(x = Diabetes, y = Total_Deaths)) + 
-  geom_point()+ geom_smooth(method = "gam",formula = y~s(x,bs="cs"))
+  geom_point()+ geom_smooth(method = "gam",formula = y~s(x,bs="cs"))+
+  ggtitle("Grace: Diabetes VS total_death")
+
 ```
