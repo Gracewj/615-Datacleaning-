@@ -49,8 +49,7 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 
 
 ```
-
-We visualize the datasets with different units: percentage and counts, have seperately created the ggplot for each variable. More details are listed below.
+We choose Top 10 total population states and filter their relation between population and total deaths to make more sense of the data. 
 
 ```{r}
 # total population and death in every state
@@ -79,7 +78,8 @@ ggtitle("Top 10 States in toal populaton and death population")
 
 ```
 
-We choose Top 10 total population states and filter their relation between population and total deaths to make more sense of the data.   
+  
+we select all variables which may impact the death rate and scale our uninsured and death data into percent. Then we build a chart about correlation between each two variables. 
 
 
 ```{r}
@@ -95,7 +95,8 @@ levelplot(vc,col.regions=col(100),main="Cor Plot Test",scales=list(x=list(rot=90
 
 ```
 
-we select all variables which may impact the death rate and scale our uninsured and death data into percent. Then we build a chart about correlation between each two variables. 
+
+We visualize the datasets with different units: percentage and counts, have seperately created the ggplot for each variable. More details are listed below.
 
 ```{r }
 Obesityp <- tablenew1 %>% 
@@ -134,11 +135,11 @@ smokerp <- tablenew1 %>%
 table.state3 <- smokerp %>% group_by(CHSI_State_Name) %>% summarise(Total_Deaths = sum(Total_Deaths),smoker_p=sum(smoker_p))
 
 ggplot(data = tablenew1) + 
-  geom_point(mapping = aes(x = Smoker, y = Total_Deaths))+ geom_smooth(mapping = aes(x = Smoker, y = Total_Deaths)) + ggtitle( "Mark： Smoker vs Death")
+  geom_point(mapping = aes(x = Smoker, y = Total_Deaths))+ geom_smooth(mapping = aes(x = Smoker, y = Total_Deaths)) + ggtitle( "Kaiyu： Smoker vs Death")
 
 ggplot(table.state3,aes(x = smoker_p, y = Total_Deaths)) + 
   geom_point(aes(color = smoker_p)) + 
-  geom_smooth() + ggtitle( "Mark： Smoker vs Death")
+  geom_smooth() + ggtitle( "Kaiyu： Smoker vs Death")
 
 ```
 
@@ -161,25 +162,8 @@ ggplot(table.state4,aes(x = diabetes_p, y = Total_Deaths)) +
 ```
 
 
- 
-  In conclusion, uninsurence, diabetes, smoking and obesity have positive relation with total death counts. Among all the variables, smoking is the most obvious factor that affect the death rate. More smoking causes higher death counts.
+ In conclusion, uninsurence, diabetes, smoking and obesity have positive relation with total death counts. Among all the variables, smoking is the most obvious factor that affect the death rate. More smoking causes higher death counts.
   
   
-
-
-
-  
-
-
-
-```{r}
- data <- data.frame(murder = USArrests$Murder, state = tolower(rownames(USArrests)))
- map <- map_data("state")
- l <- ggplot(data, aes(fill = murder))
- l + geom_map(aes(map_id = state), map = map) +
- expand_limits(x = map$long, y = map$lat)
-# map_id, alpha, color, fill, linetype, size)
-
-```
   
   
