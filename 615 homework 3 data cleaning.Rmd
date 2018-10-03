@@ -6,7 +6,7 @@ output:
   pdf_document:
     latex_engine: xelatex
 ---
- We collect the data from he Data.gov, named Community Health Status Indicators (CHSI) to Combat Obesity, Heart Disease and Cancer(Chsi_dataset).It is imperative to understand that behavioral factors such as obesity, tobacco use, diet, physical activity, alcohol and drug use, sexual behavior and others substantially contribute to these deaths. After data cleaning, we choose obesity, uninsurence, diabetes, smkoing as our variables. 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,dev="CairoPNG",fig.align = "center", 
                       fig.width = 5.656, fig.height = 4, global.par = TRUE)
@@ -17,6 +17,12 @@ options(cli.width = 60)  # For tidyverse loading messages
 pacman::p_load("ggplot2","knitr","arm","foreign","car","Cairo","data.table","dplyr")
 par (mar=c(3,3,2,1), mgp=c(2,.7,0), tck=-.01)
 ```
+
+
+
+# Introduction
+
+We collect the data from he Data.gov, named Community Health Status Indicators (CHSI) to Combat Obesity, Heart Disease and Cancer(Chsi_dataset).It is imperative to understand that behavioral factors such as obesity, tobacco use, diet, physical activity, alcohol and drug use, sexual behavior and others substantially contribute to these deaths. After data cleaning, we choose obesity, uninsurence, diabetes, smkoing as our variables. 
 
 ```{r }
 #import datasets from MEASURESOFBIRTHANDDEATH and RISKFACTORSANDACCESSTOCARE
@@ -44,11 +50,9 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 
 ```
 
- We visualize the datasets with different units: percentage and counts, have seperately created the ggplot for each variable. More details are listed below.
+We visualize the datasets with different units: percentage and counts, have seperately created the ggplot for each variable. More details are listed below.
 
 ```{r }
-library(ggplot2)
-
 Obesityp <- tablenew1 %>% 
   select(Obesity,Population_Size,Total_Deaths,CHSI_State_Name) %>% 
   mutate(obesity_p = Obesity/100*Population_Size)
@@ -116,8 +120,52 @@ ggplot(table.state4,aes(x = diabetes_p, y = Total_Deaths)) +
   In conclusion, uninsurence, diabetes, smoking and obesity have positive relation with total death counts. Among all the variables, smoking is the most obvious factor that affect the death rate. More smoking causes higher death counts.
   
   
+
+
+```{r}
+# total population and death in every state
+
+T_population<-tablenew1 %>%
+ group_by(CHSI_State_Name) %>%
+ summarise(total_p = sum(Population_Size)/10000,total_d=sum(Total_Deaths)/1000,
+           death_rate=total_d/total_p) %>%
+ arrange(desc(total_p))
+T_p<-data.frame(T_population[c(1:10),])
+T_p1<-T_p %>% select(CHSI_State_Name,total_d)%>% mutate(type=rep("1",10)) %>% arrange(desc(total_d))
+T_p2<-T_p %>% select(CHSI_State_Name,total_p) %>% mutate(type=rep("0",10))
+names(T_p1) <- c("State","Number","Type")
+names(T_p2) <- c("State","Number","Type")
+T_p_f<-merge(T_p1,T_p2,all=T)
+
+
+ggplot(data=T_p_f, aes(x=State, y=Number, fill=Type)) +
+geom_bar(stat="identity",position=position_dodge(),color="black")+
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 90))+ 
+scale_fill_brewer(palette="Paired",labels=c("Total population", "Death population"))+
+scale_x_discrete(limits=c("California","Texas","New York", "Florida","Pennsylvania","Illinois","Michigan","Ohio","New Jersey","North Carolina"))+
+ggtitle("Top 10 States in toal populaton and death population")
+
+
+```
   
-  
+
+```{r}
+# heat plot 
+library(lattice)
+library(RColorBrewer)
+library(pheatmap)
+cols<-brewer.pal(4,"Spectral")
+col<-colorRampPalette(cols)
+heat_data<-tablenew1 %>% select(Obesity,Smoker,Diabetes,Uninsured,Total_Deaths,Population_Size) %>% 
+mutate(uninsured=Uninsured/Population_Size*100,Death=Total_Deaths/Population_Size*100)
+heat_data<-heat_data[,-c(4,5,6)]
+vc<-cor(heat_data)
+levelplot(vc,col.regions=col(100),main="Cor Plot Test",scales=list(x=list(rot=90)))
+
+
+```
+
   
   
   
