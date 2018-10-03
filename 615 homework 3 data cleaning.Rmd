@@ -52,6 +52,51 @@ tablenew1<-tablenew[complete.cases(tablenew),]
 
 We visualize the datasets with different units: percentage and counts, have seperately created the ggplot for each variable. More details are listed below.
 
+```{r}
+# total population and death in every state
+
+T_population<-tablenew1 %>%
+ group_by(CHSI_State_Name) %>%
+ summarise(total_p = sum(Population_Size)/10000,total_d=sum(Total_Deaths)/1000,
+           death_rate=total_d/total_p) %>%
+ arrange(desc(total_p))
+T_p<-data.frame(T_population[c(1:10),])
+T_p1<-T_p %>% select(CHSI_State_Name,total_d)%>% mutate(type=rep("1",10)) %>% arrange(desc(total_d))
+T_p2<-T_p %>% select(CHSI_State_Name,total_p) %>% mutate(type=rep("0",10))
+names(T_p1) <- c("State","Number","Type")
+names(T_p2) <- c("State","Number","Type")
+T_p_f<-merge(T_p1,T_p2,all=T)
+
+
+ggplot(data=T_p_f, aes(x=State, y=Number, fill=Type)) +
+geom_bar(stat="identity",position=position_dodge(),color="black")+
+theme_minimal()+
+theme(axis.text.x = element_text(angle = 90))+ 
+scale_fill_brewer(palette="Paired",labels=c("Total population", "Death population"))+
+scale_x_discrete(limits=c("California","Texas","New York", "Florida","Pennsylvania","Illinois","Michigan","Ohio","New Jersey","North Carolina"))+
+ggtitle("Top 10 States in toal populaton and death population")
+
+
+```
+
+We choose Top 10 total population states and filter their relation between population and total deaths to make more sense of the data.   
+
+
+```{r}
+# heat plot 
+cols<-brewer.pal(4,"Spectral")
+col<-colorRampPalette(cols)
+heat_data<-tablenew1 %>% select(Obesity,Smoker,Diabetes,Uninsured,Total_Deaths,Population_Size) %>% 
+mutate(uninsured=Uninsured/Population_Size*100,Death=Total_Deaths/Population_Size*100)
+heat_data<-heat_data[,-c(4,5,6)]
+vc<-cor(heat_data)
+levelplot(vc,col.regions=col(100),main="Cor Plot Test",scales=list(x=list(rot=90)))
+
+
+```
+
+we select all variables which may impact the death rate and scale our uninsured and death data into percent. Then we build a chart about correlation between each two variables. 
+
 ```{r }
 Obesityp <- tablenew1 %>% 
   select(Obesity,Population_Size,Total_Deaths,CHSI_State_Name) %>% 
@@ -122,54 +167,18 @@ ggplot(table.state4,aes(x = diabetes_p, y = Total_Deaths)) +
   
 
 
-```{r}
-# total population and death in every state
 
-T_population<-tablenew1 %>%
- group_by(CHSI_State_Name) %>%
- summarise(total_p = sum(Population_Size)/10000,total_d=sum(Total_Deaths)/1000,
-           death_rate=total_d/total_p) %>%
- arrange(desc(total_p))
-T_p<-data.frame(T_population[c(1:10),])
-T_p1<-T_p %>% select(CHSI_State_Name,total_d)%>% mutate(type=rep("1",10)) %>% arrange(desc(total_d))
-T_p2<-T_p %>% select(CHSI_State_Name,total_p) %>% mutate(type=rep("0",10))
-names(T_p1) <- c("State","Number","Type")
-names(T_p2) <- c("State","Number","Type")
-T_p_f<-merge(T_p1,T_p2,all=T)
-
-
-ggplot(data=T_p_f, aes(x=State, y=Number, fill=Type)) +
-geom_bar(stat="identity",position=position_dodge(),color="black")+
-theme_minimal()+
-theme(axis.text.x = element_text(angle = 90))+ 
-scale_fill_brewer(palette="Paired",labels=c("Total population", "Death population"))+
-scale_x_discrete(limits=c("California","Texas","New York", "Florida","Pennsylvania","Illinois","Michigan","Ohio","New Jersey","North Carolina"))+
-ggtitle("Top 10 States in toal populaton and death population")
-
-
-```
   
 
-```{r}
-# heat plot 
-cols<-brewer.pal(4,"Spectral")
-col<-colorRampPalette(cols)
-heat_data<-tablenew1 %>% select(Obesity,Smoker,Diabetes,Uninsured,Total_Deaths,Population_Size) %>% 
-mutate(uninsured=Uninsured/Population_Size*100,Death=Total_Deaths/Population_Size*100)
-heat_data<-heat_data[,-c(4,5,6)]
-vc<-cor(heat_data)
-levelplot(vc,col.regions=col(100),main="Cor Plot Test",scales=list(x=list(rot=90)))
 
-
-```
 
 ```{r}
-data <- data.frame(murder = USArrests$Murder, state = tolower(rownames(USArrests)))
-map <- map_data("state")
-l <- ggplot(data, aes(fill = murder))
-l + geom_map(aes(map_id = state), map = map) +
-expand_limits(x = map$long, y = map$lat)
-map_id, alpha, color, fill, linetype, size)
+ data <- data.frame(murder = USArrests$Murder, state = tolower(rownames(USArrests)))
+ map <- map_data("state")
+ l <- ggplot(data, aes(fill = murder))
+ l + geom_map(aes(map_id = state), map = map) +
+ expand_limits(x = map$long, y = map$lat)
+# map_id, alpha, color, fill, linetype, size)
 
 ```
   
