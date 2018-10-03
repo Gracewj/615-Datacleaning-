@@ -14,7 +14,7 @@ knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60),  # For code
                       width = 60)  # For output
 options(cli.width = 60)  # For tidyverse loading messages
 #install.packages("pacman",repos="https://cloud.r-project.org")
-pacman::p_load("ggplot2","knitr","arm","foreign","car","Cairo","data.table","dplyr")
+pacman::p_load("ggplot2","knitr","arm","foreign","car","Cairo","data.table","dplyr","lattice","RColorBrewer","pheatmap")
 par (mar=c(3,3,2,1), mgp=c(2,.7,0), tck=-.01)
 ```
 
@@ -152,9 +152,6 @@ ggtitle("Top 10 States in toal populaton and death population")
 
 ```{r}
 # heat plot 
-library(lattice)
-library(RColorBrewer)
-library(pheatmap)
 cols<-brewer.pal(4,"Spectral")
 col<-colorRampPalette(cols)
 heat_data<-tablenew1 %>% select(Obesity,Smoker,Diabetes,Uninsured,Total_Deaths,Population_Size) %>% 
@@ -166,6 +163,14 @@ levelplot(vc,col.regions=col(100),main="Cor Plot Test",scales=list(x=list(rot=90
 
 ```
 
-  
+```{r}
+data <- data.frame(murder = USArrests$Murder, state = tolower(rownames(USArrests)))
+map <- map_data("state")
+l <- ggplot(data, aes(fill = murder))
+l + geom_map(aes(map_id = state), map = map) +
+expand_limits(x = map$long, y = map$lat)
+map_id, alpha, color, fill, linetype, size)
+
+```
   
   
