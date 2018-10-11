@@ -1,0 +1,56 @@
+---
+title: "redsox data"
+author: "Siwei Hu"
+date: "October 10, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(xml2)
+library(rvest)
+library(stringr)
+
+```
+
+```{r}
+site1 <- "https://www.basketball-reference.com/leagues/NBA_"
+site2 <- "_games-"
+site3 <- ".html"
+year <- c(2013:2018)
+month <- c("january","february","march","april","may","june","october","november","december")
+
+
+
+a<-paste(site1,"2013",site2,month,site3,sep="")
+b<-paste(site1,"2014",site2,month,site3,sep="")
+c<-paste(site1,"2015",site2,month,site3,sep="")
+d<-paste(site1,"2016",site2,month,site3,sep="")
+e<-paste(site1,"2017",site2,month,site3,sep="")            
+f<-paste(site1,"2018",site2,month,site3,sep="")
+site<-c(a,b,c,d,e,f)
+webpage <-c()
+name1<-c()
+name2<-c()
+
+for(i in length(site)){
+  
+webpage[i] <- read_html(site[i])
+
+
+name1[i]<- html_nodes(webpage,'.left:nth-child(1)')
+name2[i] <- html_nodes(webpage,'.center+.right') 
+i = i+1
+}
+namenew1 <- str_split(name1,"\"")
+list3<-namenew1[[3]]
+
+
+date_team<-list3[[8]]
+haviland <- do.call(rbind,lapply(namenew1, data.frame))
+names(haviland)[1] <- "date"
+gamedate <- haviland[grep(pattern = "/BOS")]
+```
