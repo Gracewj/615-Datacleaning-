@@ -35,7 +35,8 @@ site<-c(a,b,c,d,e,f)
 webpage <-c()
 name1<-c()
 name2<-c()
-total <- c()
+total.date <- c()
+total.attdence <- c()
 for(i in 1:length(site)){
   
 webpage<- read_html(site[i])
@@ -43,11 +44,10 @@ webpage<- read_html(site[i])
 
 name1<- webpage %>% html_nodes('.left:nth-child(1)') %>% html_attrs()
 name2<- webpage %>% html_nodes('.center+.right') %>% html_attrs()
-total.date <- c(total,name1)
-total.attdence <- c(total,name2)
+total.date <- c(total.date,name1)
+total.attdence <- c(total.attdence,name2)
 }
 total.date <- data.frame(matrix(unlist(total.date), nrow= 16098, byrow=T))
 total.attdence <- data.frame(matrix(unlist(total.attdence), nrow= 16098, byrow=T))
 ```
-
 
