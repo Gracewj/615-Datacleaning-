@@ -36,21 +36,30 @@ webpage <-c()
 name1<-c()
 name2<-c()
 
-for(i in length(site)){
+for(i in 1:length(site)){
   
 webpage[i] <- read_html(site[i])
 
 
-name1[i]<- html_nodes(webpage,'.left:nth-child(1)')
-name2[i] <- html_nodes(webpage,'.center+.right') 
+name1[i]<- webpage[i] %>% html_nodes('.left:nth-child(1)') %>% html_attrs()
+name2[i] <- webpage[i] %>% html_nodes('.center+.right') %>% html_attrs()
 i = i+1
 }
 namenew1 <- str_split(name1,"\"")
 list3<-namenew1[[3]]
 
 
+
 date_team<-list3[[8]]
 haviland <- do.call(rbind,lapply(namenew1, data.frame))
 names(haviland)[1] <- "date"
 gamedate <- haviland[grep(pattern = "/BOS")]
+```
+
+
+```{r}
+aaa <- site[1]
+ws <- read_html(aaa) 
+urls <- ws%>% html_nodes(".left:nth-child(1)") %>% html_attrs()
+urls.1<- data.frame(matrix(unlist(urls), nrow=227, byrow=T))
 ```
