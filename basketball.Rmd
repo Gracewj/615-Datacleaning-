@@ -35,31 +35,19 @@ site<-c(a,b,c,d,e,f)
 webpage <-c()
 name1<-c()
 name2<-c()
-
+total <- c()
 for(i in 1:length(site)){
   
-webpage[i] <- read_html(site[i])
+webpage<- read_html(site[i])
 
 
-name1[i]<- webpage[i] %>% html_nodes('.left:nth-child(1)') %>% html_attrs()
-name2[i] <- webpage[i] %>% html_nodes('.center+.right') %>% html_attrs()
-i = i+1
+name1<- webpage %>% html_nodes('.left:nth-child(1)') %>% html_attrs()
+name2<- webpage %>% html_nodes('.center+.right') %>% html_attrs()
+total.date <- c(total,name1)
+total.attdence <- c(total,name2)
 }
-namenew1 <- str_split(name1,"\"")
-list3<-namenew1[[3]]
-
-
-
-date_team<-list3[[8]]
-haviland <- do.call(rbind,lapply(namenew1, data.frame))
-names(haviland)[1] <- "date"
-gamedate <- haviland[grep(pattern = "/BOS")]
+total.date <- data.frame(matrix(unlist(total.date), nrow= 16098, byrow=T))
+total.attdence <- data.frame(matrix(unlist(total.attdence), nrow= 16098, byrow=T))
 ```
 
 
-```{r}
-aaa <- site[1]
-ws <- read_html(aaa) 
-urls <- ws%>% html_nodes(".left:nth-child(1)") %>% html_attrs()
-urls.1<- data.frame(matrix(unlist(urls), nrow=227, byrow=T))
-```
